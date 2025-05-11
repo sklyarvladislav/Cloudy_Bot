@@ -1,7 +1,5 @@
 #--- Основные бибилиотеки ---#
 import requests
-from dotenv import load_dotenv
-import os
 import asyncio
 from aiogram.types import Message
 from aiogram.types import InlineKeyboardButton
@@ -18,10 +16,11 @@ import handlers.time_handler as time_handler
 from handlers.time_handler import grinvich_t, user_t
 import handlers.GetWeather as GetWeather
 
+#--- Токены из config ---#
+from config import BOT_TOKEN, API_KEY
+
 # передадим токены и маршрут
-load_dotenv()
-bot = Bot(os.getenv("BOT_TOKEN"))
-API_KEY = os.getenv("API_ID")
+bot = Bot(BOT_TOKEN)
 dp = Dispatcher()
 dp.include_router(time_handler.time_router)
 dp.include_router(GetWeather.get_w_router)

@@ -10,7 +10,9 @@ from aiogram.filters import Command
 
 #--- Импорт из time ---#
 from handlers.time_handler import grinvich_t, user_t
-from main import API_KEY
+
+#--- Передача API-ключа ---#
+from config import API_KEY
 
 # для прокладки маршрута
 get_w_router = Router()
