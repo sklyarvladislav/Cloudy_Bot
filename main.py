@@ -16,19 +16,18 @@ import handlers.time_handler as time_handler
 from handlers.time_handler import grinvich_t, user_t
 import handlers.GetWeather as GetWeather
 
-#--- Токены из config ---#
+#--- Передадим приветствия ---#
+from handlers.GetWeather import greetings
+
+#--- Токен и ключ из config ---#
 from config import BOT_TOKEN, API_KEY
 
-# передадим токены и маршрут
+# Передадим токены и маршрут
 bot = Bot(BOT_TOKEN)
 dp = Dispatcher()
 dp.include_router(time_handler.time_router)
 dp.include_router(GetWeather.get_w_router)
 
-
-
-# Набор приветствий
-word = ['Доброе утро', 'Добрый день', 'Добрый вечер', 'Доброй ночи']
 
 
 #--- Блок /start ---#
@@ -40,9 +39,13 @@ async def start_command(message: Message):
         [InlineKeyboardButton(text="Погода в моем городе 🌥️", callback_data="get_user_geo")]
     ])
 
-    await message.answer(f"Привет, {message.from_user.full_name}. "
-                         f"Чтобы узнать погоду, напишите название города или дайте доступ к геопозиции(не доступно на ПК)",
-                           reply_markup=ikb)
+    await message.answer(f"Привет, {message.from_user.full_name}. " \
+                         f"Чтобы узнать погоду, напишите название города или дайте доступ к геопозиции\n\n" +
+                          f"_❗️О выводе погоды по геопозиции❗️\n_" \
+                          f"*1.* Функция недоступна для ПК\n" + 
+                          f"*2.* Telegram слишком точно определяет вашу геопозицию," + 
+                          " поэтому иногда может показывать погоду не города, а вашего района",
+                           reply_markup=ikb, parse_mode = "Markdown")
     
 
 
@@ -74,7 +77,7 @@ async def get_weather(message: Message, state: FSMContext):
         if int(grinvich_t.strftime('%H')) + local_utc > 24:
             konvert_utc = (int(grinvich_t.strftime('%H')) + local_utc ) - 24
         elif int(grinvich_t.strftime('%H')) + local_utc == 24:
-            konvert_utc = "00:00"
+            konvert_utc = "00"
         else:
             konvert_utc = int(grinvich_t.strftime('%H')) + local_utc
 
@@ -98,7 +101,7 @@ async def get_weather(message: Message, state: FSMContext):
             i = 3
 
         # Отправляем сообщение
-        await message.answer(f"{word[i]}, {message.from_user.full_name}!\n"
+        await message.answer(f"{greetings[i]}, {message.from_user.full_name}!\n"
                              f"Погода в городе *{main_city.title()}*\n\n"
                              "Текущие данные:\n"
                              f"Местное время: {fin_utc}\n"
