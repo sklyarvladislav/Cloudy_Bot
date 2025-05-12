@@ -21,5 +21,10 @@ no_time_ikb = InlineKeyboardMarkup(inline_keyboard = [
 
 # создание клавиатуры через цикл
 
-# def create_time_kb():
+def create_deleting_ikb(times: list[str]) -> InlineKeyboardMarkup:
+    buttons = [
+        [InlineKeyboardButton(text=time, callback_data=f"delete_{time}")]
+        for time in times
+    ]
+    return InlineKeyboardMarkup(inline_keyboard=buttons)
     
