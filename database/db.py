@@ -1,57 +1,53 @@
 import sqlite3
 
-# --- Создаем или подключаемся к БД ---#
 conn = sqlite3.connect("bot_database.db")
 cursor = conn.cursor()
 
-# --- Таблица для хранения времени пользователя ---#
-cursor.execute('''
-CREATE TABLE IF NOT EXISTS users_time (
-    user_id INTEGER,
-    time TEXT,
-    PRIMARY KEY (user_id, time)
-)
-''')
-
-conn.commit()
-conn.close()
 
 # добавить время
-def set_user_time(user_id: int, time: str):
+def set_user_time(user_id: int, time: str) -> bool:
     conn = sqlite3.connect('bot_database.db')
     cursor = conn.cursor()
 
-    #
+    # проверяем количество уже сохранённых времён
     cursor.execute("SELECT COUNT(*) FROM users_time WHERE user_id = ?", (user_id,))
-    countTimes = cursor.fetchone()[0]
+    count_times = cursor.fetchone()[0]
 
-    if countTimes >= 3:
+    if count_times >= 3:
         conn.close()
-        raise Exception("Лимит времен превышен")
+        return False  # пользователь превысил лимит
 
     cursor.execute('''
-                    INSERT INTO users_time(user_id, time) VALUES (?, ?) 
-                   ''', (user_id, time))
+        INSERT INTO users_time(user_id, time) VALUES (?, ?)
+    ''', (user_id, time))
     conn.commit()
     conn.close()
+    return True
 
 
-
-# запросить время по id
-def get_user_time(user_id: int) -> list[str] | None:
+# запросить время по id для вывода пользователю
+def get_user_time(user_id: int) -> str:
     conn = sqlite3.connect('bot_database.db')
     cursor = conn.cursor()
+    cursor.execute('SELECT time FROM users_time WHERE user_id = ?', (user_id,))
+    times = [row[0] for row in cursor.fetchall()]
+    conn.close()
+    
+    return ', '.join(times) if times else 'отсутствует'
 
-    cursor.execute('SELECT time FROM users_time WHERE user_id = ?', (user_id, ))
-
-    return [result[0] for result in cursor.fetchall()]
-
+# запросить время по id для кнопок
+def get_user_time_list(user_id: int) -> list[str]:
+    conn = sqlite3.connect("bot_database.db")
+    cursor = conn.cursor()
+    cursor.execute("SELECT time FROM users_time WHERE user_id = ?", (user_id,))
+    times = [row[0] for row in cursor.fetchall()]
+    conn.close()
+    return times
 
 # удалить время
-def delete_user_time(user_id: int) -> str | None:
-    conn = sqlite3.connect('bot_database.db')
+def delete_user_time(user_id: int, time: str):
+    conn = sqlite3.connect("bot_database.db")
     cursor = conn.cursor()
-
-    cursor.execute(''' DELETE FROM users_time WHERE user_id = ?''', (user_id,))
+    cursor.execute("DELETE FROM users_time WHERE user_id = ? AND time = ?", (user_id, time))
     conn.commit()
     conn.close()
