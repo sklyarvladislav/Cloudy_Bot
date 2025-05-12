@@ -20,7 +20,6 @@ no_time_ikb = InlineKeyboardMarkup(inline_keyboard = [
               [InlineKeyboardButton(text = "Отменить действие", callback_data = "cansel_action")] ])
 
 # создание клавиатуры через цикл
-
 def create_deleting_ikb(times: list[str]) -> InlineKeyboardMarkup:
     buttons = [
         [InlineKeyboardButton(text=time, callback_data=f"delete_{time}")]

@@ -122,6 +122,7 @@ async def delete_set_time(callback: types.CallbackQuery, state: FSMContext):
 
     delete_user_time(user_id, time_to_delete)
 
+    await callback.message.delete()
     await callback.message.answer(f"Время {time_to_delete} успешно удалено ✅")
     await state.clear()
 

@@ -29,23 +29,30 @@ greetings = ['Доброе утро', 'Добрый день', 'Добрый в�
 @get_w_router.callback_query(F.data == "get_user_geo")
 async def request_location(callback: types.CallbackQuery, state: FSMContext):
     # После нажатия inline-кнопки — отправляем обычную кнопку с запросом геолокации
+
     kb = ReplyKeyboardMarkup(
         keyboard=[
-            [KeyboardButton(text="📍 Отправить геопозицию", request_location=True)]
-        ],
+            [KeyboardButton(text="📍 Отправить геопозицию", request_location=True),
+            KeyboardButton(text = "Отменить действие")]
+            ],
         resize_keyboard=True,
         one_time_keyboard=True
     )
 
     await callback.message.answer("Подтвердите отправку геопозиции👇", reply_markup=kb)
-    await callback.answer()
     
-    # # удалит первое сообщение, доделатб!!!
-    # await callback.answer.delete()
     await state.set_state(UserGeo.get_weather_geo)
 
+#--- Обработка отмены действия ---#
+@get_w_router.message(F.text == "Отменить действие")
+async def cansel_button_action(message: types.Message, state:FSMContext):
+    await message.answer("Отменено")
+    await message.delete()
+    await state.clear()
+
+#--- Отправим погоду по геопозиции ---#
 @get_w_router.message(F.location, UserGeo.get_weather_geo)
-async def handle_location(message: Message, state: FSMContext):
+async def handle_location(message: types.Message, state: FSMContext):
     # сохраняем долготу и широту
     lat = message.location.latitude
     lon = message.location.longitude
@@ -93,5 +100,6 @@ async def handle_location(message: Message, state: FSMContext):
 
     except Exception as e:
         print(e)
-        await message.answer("Произошла ошибка в определении геопозиции!\nПопробуйте ещё раз или введите название населенного пункта вручную")
+        await message.answer("Произошла ошибка в определении геопозиции!\nПопробуйте ещё раз или введите название населенного пункта вручную",
+                              reply_markup = types.reply_keyboard_remove)
         await state.clear()
