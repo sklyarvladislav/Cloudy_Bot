@@ -21,6 +21,9 @@ get_w_router = Router()
 class UserGeo(StatesGroup):
     get_weather_geo = State()
 
+# приветствия
+greetings = ['Доброе утро', 'Добрый день', 'Добрый вечер', 'Доброй ночи']
+
 
 # обработка события inline-кнопки
 @get_w_router.callback_query(F.data == "get_user_geo")
@@ -77,9 +80,7 @@ async def handle_location(message: Message, state: FSMContext):
         else:
             i = 3
 
-        word = ['Доброе утро', 'Добрый день', 'Добрый вечер', 'Доброй ночи']
-
-        await message.answer(f"{word[i]}, {message.from_user.full_name}!\n"
+        await message.answer(f"{greetings[i]}, {message.from_user.full_name}!\n"
                              f"Погода в городе {city_name}\n\n"
                              "Текущие данные:\n"
                              f"Местное время: {fin_utc}\n"
