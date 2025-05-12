@@ -100,6 +100,5 @@ async def handle_location(message: types.Message, state: FSMContext):
 
     except Exception as e:
         print(e)
-        await message.answer("Произошла ошибка в определении геопозиции!\nПопробуйте ещё раз или введите название населенного пункта вручную",
-                              reply_markup = types.reply_keyboard_remove)
+        await message.answer("Произошла ошибка в определении геопозиции!\nПопробуйте ещё раз или введите название населенного пункта вручную")
         await state.clear()
