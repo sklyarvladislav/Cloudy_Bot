@@ -9,10 +9,10 @@ from aiogram.fsm.state import StatesGroup, State
 from aiogram.filters import Command
 
 #--- Импорт из time ---#
-from handlers.time_handler import grinvich_t, user_t
+from handlers.notification_handler import grinvich_t, user_t
 
 #--- Передача API-ключа ---#
-from config import API_KEY
+from config import WEATHER_API_KEY
 
 # для прокладки маршрута
 get_w_router = Router()
@@ -58,7 +58,7 @@ async def handle_location(message: types.Message, state: FSMContext):
     lon = message.location.longitude
 
     try:
-        user_location_url = f"http://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&units=metric&lang=ru&appid={API_KEY}"
+        user_location_url = f"http://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&units=metric&lang=ru&appid={WEATHER_API_KEY}"
         user_location_data = requests.get(user_location_url).json()
 
         # Достаем нужные данные

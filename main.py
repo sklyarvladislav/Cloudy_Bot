@@ -12,21 +12,21 @@ from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.context import FSMContext
 
 #--- Файлы с функциями ---#
-import handlers.time_handler as time_handler
-from handlers.time_handler import grinvich_t, user_t
-import handlers.GetWeather as GetWeather
+import handlers.notification_handler as notification_handler
+from handlers.notification_handler import grinvich_t, user_t
+import handlers.get_geo_weather as get_geo_weather
 
 #--- Передадим приветствия ---#
-from handlers.GetWeather import greetings
+from handlers.get_geo_weather import greetings
 
-#--- Токен и ключ из config ---#
-from config import BOT_TOKEN, API_KEY
+#--- Токен и API-ключи из config ---#
+from config import BOT_TOKEN, WEATHER_API_KEY
 
 # Передадим токены и маршрут
 bot = Bot(BOT_TOKEN)
 dp = Dispatcher()
-dp.include_router(time_handler.time_router)
-dp.include_router(GetWeather.get_w_router)
+dp.include_router(notification_handler.time_router)
+dp.include_router(get_geo_weather.get_w_router)
 
 
 
@@ -64,7 +64,7 @@ async def get_weather(message: Message, state: FSMContext):
     main_city = message.text
 
     # вставляем название города в запрос
-    url = f"http://api.openweathermap.org/data/2.5/weather?q={main_city}&lang=ru&units=metric&appid={API_KEY}"
+    url = f"http://api.openweathermap.org/data/2.5/weather?q={main_city}&lang=ru&units=metric&appid={WEATHER_API_KEY}"
     
     # пробуем достать данные и вывести их
     try:
