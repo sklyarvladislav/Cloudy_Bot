@@ -1,6 +1,7 @@
 #--- Основные бибилиотеки ---#
 import requests
 import asyncio
+from datetime import datetime, timedelta, timezone
 from aiogram.types import Message
 from aiogram.types import InlineKeyboardButton
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup, KeyboardButton, ReplyKeyboardMarkup
@@ -64,25 +65,21 @@ async def get_weather(message: Message, state: FSMContext):
     main_city = message.text
 
     # вставляем название города в запрос
-    url = f"http://api.openweathermap.org/data/2.5/weather?q={main_city}&lang=ru&units=metric&appid={WEATHER_API_KEY}"
+    weather_url = f"http://api.openweathermap.org/data/2.5/weather?q={main_city}&lang=ru&units=metric&appid={WEATHER_API_KEY}"
     
     # пробуем достать данные и вывести их
     try:
-        data = requests.get(url).json()  # Получение ответа API
+        data = requests.get(weather_url).json()  # Получение ответа API
 
         # Достаем параметры погоды
         local_utc = round(data['timezone']) // 3600  # Часовой пояс
 
         # конвертируем время и проверяем не больше ли оно 24 часов?
-        if int(grinvich_t.strftime('%H')) + local_utc > 24:
-            konvert_utc = (int(grinvich_t.strftime('%H')) + local_utc ) - 24
-        elif int(grinvich_t.strftime('%H')) + local_utc == 24:
-            konvert_utc = "00"
-        else:
-            konvert_utc = int(grinvich_t.strftime('%H')) + local_utc
-
-        # собираем итоговое время
-        fin_utc = f"{konvert_utc}:{grinvich_t.strftime('%M')}"
+        grinvich_t = datetime.now(timezone.utc)
+        local_utc = round(data['timezone'])  # в секундах
+        local_time = grinvich_t + timedelta(seconds=local_utc)
+        fin_utc = local_time.strftime("%H:%M")
+        
 
         local_temp = round(data['main']['temp']) # темпуратура
         local_temp_feel = round(data['main']['feels_like']) # темпуратура по ощущ.
@@ -103,7 +100,7 @@ async def get_weather(message: Message, state: FSMContext):
         # Отправляем сообщение
         await message.answer(f"{greetings[i]}, {message.from_user.full_name}!\n"
                              f"Погода в городе *{main_city.title()}*\n\n"
-                             "Текущие данные:\n"
+                             "Текущие данные\n"
                              f"Местное время: {fin_utc}\n"
                              f"Температура: {local_temp}°C\n"
                              f"Ощущаеся как: {local_temp_feel}°C\n"
