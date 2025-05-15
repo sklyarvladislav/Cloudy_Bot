@@ -16,12 +16,12 @@ cancel_ikb = InlineKeyboardMarkup(inline_keyboard = [[InlineKeyboardButton(text 
 #--- Блок времени ---#
 
 # Удалить время + отменить действие
-time_exist_ikb = InlineKeyboardMarkup(inline_keyboard = [[InlineKeyboardButton(text = "Удалить время", callback_data = "delete_set_time"),
+time_exist_ikb = InlineKeyboardMarkup(inline_keyboard = [[InlineKeyboardButton(text = "Удалить время", callback_data = "delete_time"),
                                                         InlineKeyboardButton(text = "Отменить действие", callback_data = "cancel_action")]])
 
 # При отсутствие времени
 no_time_ikb = InlineKeyboardMarkup(inline_keyboard = [
-              [InlineKeyboardButton(text = "Установить свое время", callback_data = "set_user_time")],
+              [InlineKeyboardButton(text = "Установить время", callback_data = "set_user_time")],
               [InlineKeyboardButton(text = "Отменить действие", callback_data = "cancel_action")] ])
 
 # Генерация кнопок со временем
@@ -54,4 +54,7 @@ def create_cities_ikb(cities: list[str]) -> InlineKeyboardMarkup:
     
 # Если город установлен
 city_exist_ikb = InlineKeyboardMarkup(inline_keyboard = [[InlineKeyboardButton(text = "Удалить город", callback_data = "delete_users_city"),
+                                                        InlineKeyboardButton(text = "Отменить действие", callback_data = "cancel_action")]])
+
+city_not_exist_ikb = InlineKeyboardMarkup(inline_keyboard = [[InlineKeyboardButton(text = "Установить город", callback_data = "set_users_city"),
                                                         InlineKeyboardButton(text = "Отменить действие", callback_data = "cancel_action")]])
