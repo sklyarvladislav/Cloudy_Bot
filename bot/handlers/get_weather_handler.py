@@ -8,7 +8,6 @@ from aiogram.fsm.state import StatesGroup, State
 from aiogram.filters import StateFilter
 
 #--- Imports из файлов ---#
-from handlers.notification_handler import grinvich_t
 from keyboards.weather_kb import geolocation_kb
 from utils.weather import get_weather_data_by_coords, get_weather_data_by_city
 
@@ -35,7 +34,7 @@ async def get_weather(message: Message, state: FSMContext):
     main_city = message.text
 
     try:
-        weather = await get_weather_data_by_city(main_city, grinvich_t)
+        weather = await get_weather_data_by_city(main_city)
         
         await message.answer(f"{weather['greeting']}, *{message.from_user.full_name}*!\n"
                              f"Погода в городе {weather['city']}\n\n"
@@ -72,7 +71,7 @@ async def handle_location(message: types.Message, state: FSMContext):
 
     # Пробуем узнать погоду по координатам
     try:
-        weather = await get_weather_data_by_coords(lat, lon, grinvich_t)
+        weather = await get_weather_data_by_coords(lat, lon)
 
         await message.answer(f"{weather['greeting']}, *{message.from_user.full_name}*!\n"
                              f"Погода в городе {weather['city']}\n\n"
