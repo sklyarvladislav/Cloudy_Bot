@@ -1,7 +1,7 @@
 #--- Основные бибилиотеки ---#
 from aiogram import types, Router, F
 from aiogram.types import Message
-from datetime import datetime, timezone
+from datetime import datetime
 import requests
 from keyboards.time_kb import(menu_ikb, cancel_ikb,
                               time_exist_ikb, no_time_ikb,
