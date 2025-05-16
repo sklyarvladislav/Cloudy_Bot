@@ -29,7 +29,6 @@ class Time(StatesGroup):
 #--- Время для вывода ---#
 user_date = datetime.now()
 user_t = int(user_date.strftime('%H'))
-grinvich_t = datetime.now(timezone.utc)
 
 
 #-------- Настройка уведомлений --------#
@@ -71,6 +70,7 @@ async def save_user_time(message: Message, state: FSMContext):
         success_db_answer = set_user_time_db(user_id = message.from_user.id, time = user_set_time)
         
         if success_db_answer:
+            await message.delete()
             await message.answer(f"Отлично, теперь отчет по погоде будет приходить вам в *{user_set_time}* ⛅️",
                                  parse_mode="Markdown"
                                 )
