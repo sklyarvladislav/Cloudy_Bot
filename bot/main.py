@@ -1,20 +1,20 @@
-#--- Основные бибилиотеки ---#
+# --- Основные бибилиотеки ---#
 import asyncio
 
-#--- Отслеживание состояния --#
+# --- Отслеживание состояния --#
 # from sheduler import scheduler, schedule_weather_jobs
 from aiogram import Bot, Dispatcher
 
-#--- Файлы с функциями ---#
+# --- Файлы с функциями ---#
 import handlers.notification_handler as notification_handler
 import handlers.get_weather_handler as get_weather_handler
 import handlers.start_handler as start_handler
 
-#--- Токен из config ---#
-from config import BOT_TOKEN
+# --- Токен из config ---#
+from bot.config import BOT_TOKEN
 
 
-#--- Запуск бота ---#
+# --- Запуск бота ---#
 async def main():
     bot = Bot(BOT_TOKEN)
     dp = Dispatcher()
@@ -28,6 +28,3 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
-
-
-    

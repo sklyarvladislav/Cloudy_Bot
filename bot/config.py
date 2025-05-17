@@ -1,7 +1,7 @@
-from dotenv import load_dotenv
 import os
+import toml
 
-load_dotenv()
-BOT_TOKEN = os.getenv("BOT_TOKEN")
-WEATHER_API_KEY = os.getenv("WEATHER_API_KEY")
+config = toml.load(os.getenv("CONFIG_FILE"))
 
+BOT_TOKEN = config["bot"]["BOT_TOKEN"]
+WEATHER_API_KEY = config["weather_api"]["WEATHER_API_KEY"]

@@ -1,0 +1,5 @@
+[bot]
+BOT_TOKEN='8141561446:AAGPlkHpXxaB5YibuQInF2lrIZwvpk9lEnU'
+
+[weather_api]
+WEATHER_API_KEY='429be5b12408a8b3d96d627d5b978cf1'

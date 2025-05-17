@@ -1,0 +1,2 @@
+CREATE DATABASE cloudy_bot;
+GRANT ALL PRIVILEGES ON DATABASE cloudy_bot TO postgres;
